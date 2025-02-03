@@ -42,12 +42,6 @@ export class Book extends BaseEntity {
   @Column({ type: "text" })
   writers: string;
 
-  @Column({ type: "int", nullable:true })
-  issn1: number;
-
-  @Column({ type: "int", nullable:true })
-  srcid: number;
-
   @Column({ type: "int", default: 0 })
   pageCount: number;
 }

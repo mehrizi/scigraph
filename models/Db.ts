@@ -1,7 +1,7 @@
 import { DataSource } from "typeorm";
 import { Book } from "./Book";
-import { Node } from "./Node";
-import { Vertice } from "./Vertice";
+import { GraphNode } from "./GraphNode";
+import { GraphEdge } from "./GraphEdge";
 // import * as dotenv from 'dotenv';
 import "reflect-metadata";
 
@@ -13,7 +13,7 @@ export const AppDataSource = new DataSource({
   username: process.env.DB_USERNAME,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_DATABASE,
-  entities: [Book, Node, Vertice],
+  entities: [Book, GraphNode, GraphEdge],
   synchronize: true,
 });
 
@@ -37,5 +37,4 @@ export default class Db {
       console.error("Unable to connect to the database:", err);
     }
   }
-
 }

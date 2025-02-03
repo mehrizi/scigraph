@@ -13,11 +13,12 @@ services:
       - "host.docker.internal:host-gateway"
     volumes:
       - .:/app
+    container_name: scigraph-app
     depends_on:
       - db
   db:
     image: mariadb:latest
-    container_name: db
+    container_name: scigraph-db
     volumes:
       - db_data:/var/lib/mysql
     environment:
