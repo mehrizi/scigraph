@@ -119,7 +119,7 @@ export async function positionNode(currentNode: GraphNode) {
     const r = (4 / currentNode.level) * Math.max(0.3, Math.random());
     node.x = currentNode.x + r * rr * Math.sin(i * increaseDegree);
     node.y = currentNode.y + r * rr * Math.cos(i * increaseDegree);
-    node.color = helpers.lighten(currentNode.color, 100 / count) as number;
+    node.color = helpers.lighten(currentNode.color, 100 / count);
     // node.y = Math.floor(i / 8) * 100;
     await node.save();
     if (node.level < 4) await positionNode(node);

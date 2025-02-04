@@ -19,4 +19,8 @@ export class GraphEdge extends BaseEntity {
   @Column({ type: "int" })
   node2: number;
 
+  key:string
+  source:number
+  target: number
+  attributes: any
 }

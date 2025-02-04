@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { getNodes } from "../actions/actions";
+import { getNodes, getPositionedNodes } from "../actions/actions";
 import Grapher from "../components/graph/Grapher";
 import { parseCsvIntoDb, positionNodes } from "../actions/seed";
 import { GraphNode } from "../models/GraphNode";
@@ -15,9 +15,10 @@ export default async function Home() {
   //   5000
   // );
 
-  await positionNodes();
+  // await positionNodes();
 
-  const r = await getNodes();
+  // const r = await getNodes();
+  const r = await getPositionedNodes();
 
   return (
     <div className="">
