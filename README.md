@@ -1,3 +1,21 @@
+# Weighting
+Every Node/Edge has a size attribute that is caclulated as a sum of the following attributes:
+- Parent Relationship size
+- Sum size of books
+- 
+## Book Weight
+Each book has the following attributes and size of a book is the multiplication of the following attributes:
+
+- Copy count
+- Book Grade (Written for public: 1, Specialized: 2)
+- Writer Grade (Noble Winner:2, Other writers: 1)
+
+Books on edge of two nodes are listed for both nodes but will contribute 50% increase in size for each node.
+
+# Positioning
+The idea is to minimize the total lenght of all edges in the graph without having overlaps of nodes!
+
+
 # Phylosophy
 I see people specialized in different fields but they usually lack a big picture or at least they don\'t know how, where and "when" their specialty is located in the field or in general knowledge.
 
