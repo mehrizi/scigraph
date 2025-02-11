@@ -1,14 +1,20 @@
-"use server";
+import { AppDataSource } from "../Db";
 import { createReadStream } from "fs";
 import { parse } from "csv-parse";
-import { GraphNode } from "../models/GraphNode";
-import { helpers } from "../components/helpers";
+import { GraphNode } from "../GraphNode";
+import { helpers } from "../../components/helpers";
 
-export async function parseCsvIntoDb(
-  filePath: string,
-  start: number,
-  limit: number
-) {
+export const run = async () => {
+  console.log("Running seed: InitialDataImportoooooooooooooooooo");
+
+  await AppDataSource.initialize();
+  console.log("Running seed: InitialDataImport");
+  await parseCsvIntoDb("../../assets/data.csv", 1, 15000);
+  // Implement seeding logic here
+  await AppDataSource.destroy();
+};
+
+async function parseCsvIntoDb(filePath: string, start: number, limit: number) {
   //   return new Promise<void>((resolve, reject) => {
   const stream = createReadStream(filePath).pipe(
     parse({ delimiter: ",", from_line: start, to_line: start + limit })
@@ -100,7 +106,7 @@ export async function parseCsvIntoDb(
   // stream.on("error", reject);
   //   });
 }
-export async function positionNode(currentNode: GraphNode) {
+async function positionNode(currentNode: GraphNode) {
   const rr = 15;
   let count = await GraphNode.count({
     where: { parent: { id: currentNode.id } },
@@ -119,7 +125,9 @@ export async function positionNode(currentNode: GraphNode) {
     const r = (4 / currentNode.level) * Math.max(0.3, Math.random());
     node.x = currentNode.x + r * rr * Math.sin(i * increaseDegree);
     node.y = currentNode.y + r * rr * Math.cos(i * increaseDegree);
-    node.color = helpers.lighten(currentNode.color, 100 / count);
+    node.color = helpers.hexToInt(
+      helpers.lighten(currentNode.color, 100 / count)
+    );
     // node.y = Math.floor(i / 8) * 100;
     await node.save();
     if (node.level < 4) await positionNode(node);
@@ -131,7 +139,7 @@ export async function positionNode(currentNode: GraphNode) {
   return;
 }
 
-export async function positionNodes() {
+async function positionNodes() {
   const distinctColorsAsInts = [
     0xff0000, // Red
     0x00ff00, // Green

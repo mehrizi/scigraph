@@ -22,7 +22,7 @@ export class helpers {
     return `#${int.toString(16).padStart(6, "0").toUpperCase()}`;
   }
 
-  static lighten(color: string | number, percent: number): string | number {
+  static lighten(color: string | number, percent: number): string  {
     if (typeof color === "number") {
       color = helpers.intToHex(color);
     }
@@ -40,7 +40,7 @@ export class helpers {
     return colorObj.spin(percent).toString();
   }
 
-  static darken(color: string | number, percent: number): string | number {
+  static darken(color: string | number, percent: number): string  {
     if (typeof color === "number") {
       color = helpers.intToHex(color);
     }
