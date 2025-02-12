@@ -1,13 +1,10 @@
-import { AppDataSource } from "./models/Db";
-import { DataSource } from "typeorm";
 import fs from "fs";
+import os from "os";
 import path from "path";
-import { createServer } from "vite";
-import { ViteNodeRunner } from "vite-node/client";
-import { ViteNodeServer } from "vite-node/server";
-import { installSourcemapsSupport } from "vite-node/source-map";
-import "reflect-metadata";
 import readline from "readline";
+import "reflect-metadata";
+import { DataSource } from "typeorm";
+import { AppDataSource } from "./models/Db";
 
 
 const args = process.argv.slice(2);
@@ -54,6 +51,7 @@ export const run = async () => {
 };`;
 
   fs.writeFileSync(seedFilePath, seedTemplate);
+
   console.log(`Seed file created: ${seedFilePath}`);
 };
 
@@ -73,13 +71,15 @@ const runSeed = async (dataSource: DataSource, name?: string) => {
     for (const modPath in modules) {
       if (name && !modPath.includes(`-${name}.ts`)) continue;
 
-      let fileNotFound = false;
+      fileNotFound = false;
       await modules[modPath].run();
     }
 
     if (fileNotFound) {
       throw new Error("Seed file not found");
     }
+
+    
   } catch (error) {
     console.error("Error running seed:", error);
   } finally {
