@@ -33,8 +33,8 @@ export class GraphNode extends BaseEntity {
   @Column({ type: "varchar", length: 255, nullable: true })
   wikilink: string;
 
-  @Column({ type: "int", default: 0 })
-  size: number;
+  @Column({ type: "float", default: 0 })
+  weight: number;
 
   @Column({ type: "int", default: 0 })
   color: number;

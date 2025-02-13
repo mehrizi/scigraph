@@ -2,6 +2,9 @@
 import React, { useEffect, useRef, useState } from "react";
 import Graph from "graphology";
 import Sigma from "sigma";
+import PhysicsPositioning from "@/classes/PhysicsPositioning";
+import forceAtlas2 from "graphology-layout-forceatlas2";
+import FA2Layout from "graphology-layout-forceatlas2/worker";
 
 type SigmaGraphProps = {
   data: any; // Replace 'any' with the appropriate type of your graph data
@@ -22,20 +25,37 @@ export default function Grapher({ data }: SigmaGraphProps): React.ReactNode {
     Set<string> | undefined
   >(undefined);
   const graph = new Graph();
+  const [layout, setLayout] = useState(null);
+  const [iterations, setIterations] = useState(0);
+  const running = useRef(true);
+
+  // const positions = forceAtlas2(graph, {iterations: 50});
 
   var renderer: Sigma | null = null;
+  // var layout: FA2Layout | null = null;
   useEffect(() => {
     if (!containerRef.current) return;
 
     graph.import(data);
+
+    // const l = new FA2Layout(graph, {
+    //   settings: {
+    //     gravity: .5,
+    //     adjustSizes: true,
+    //   },
+    // });
+    // setLayout(l);
+
+    // // To start the layout
+    // l.start();
+
+
+    // graph.
     renderer = new Sigma(graph, containerRef.current, {
       maxCameraRatio: 1,
     });
 
-    // Populate datalist options
-    const nodeLabels = graph
-      .nodes()
-      .map((node) => graph.getNodeAttribute(node, "label"));
+    // renderer.({ worker: true, barnesHutOptimize: true });
 
     const handleHover = (node?: string) => {
       if (node) {
@@ -140,6 +160,29 @@ export default function Grapher({ data }: SigmaGraphProps): React.ReactNode {
 
   return (
     <div>
+      <button
+        onClick={() => {
+          const obj = new PhysicsPositioning(graph);
+          obj.runSimulation();
+          renderer?.refresh();
+        }}
+      >
+        Change
+      </button>
+      <button
+        onClick={() => {
+          layout.stop();
+        }}
+      >
+        Stop
+      </button>
+      <button
+        onClick={() => {
+          layout.start();
+        }}
+      >
+        start
+      </button>
       <input
         ref={searchInputRef}
         type="text"

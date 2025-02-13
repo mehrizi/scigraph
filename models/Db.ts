@@ -19,6 +19,7 @@ export const AppDataSource = new DataSource({
 
 export default class Db {
   protected static instance: Db;
+
   static async getInstance(): Promise<Db> {
     if (!Db.instance) {
       Db.instance = new Db();
@@ -27,7 +28,7 @@ export default class Db {
     }
     return Db.instance;
   }
-  protected constructor() {}
+  protected constructor() { }
 
   private async initialize() {
     try {
@@ -36,5 +37,15 @@ export default class Db {
     } catch (err) {
       console.error("Unable to connect to the database:", err);
     }
+  }
+
+  public async clean(name = 'nodes') {
+    // const repository = AppDataSource.getRepository(name); // Get repository
+    await AppDataSource.query(`SET FOREIGN_KEY_CHECKS = 0;`)
+    await AppDataSource.query(`TRUNCATE ${name};`)
+    await AppDataSource.query(`SET FOREIGN_KEY_CHECKS = 1;`)
+
+    // await repository.clear(); // Clear each entity table's content
+
   }
 }

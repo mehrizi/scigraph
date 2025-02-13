@@ -1,6 +1,14 @@
 import tinycolor from "tinycolor2";
+import { HexColor } from "./types";
 
-export class helpers {
+export class Helpers {
+  static async sleep(millis:number)
+  {
+    // sleep
+    return new Promise(resolve => setTimeout(resolve, millis));
+  }
+
+
   static hexToInt(hex: string): number {
     // Remove # if present
     const cleanHex = hex.replace("#", "");
@@ -13,7 +21,7 @@ export class helpers {
     return parseInt(cleanHex, 16);
   }
 
-  static intToHex(int: number): string {
+  static intToHex(int: number): HexColor {
     // Validate range
     if (int < 0 || int > 0xffffff) {
       throw new Error("Color value out of range");
@@ -22,31 +30,31 @@ export class helpers {
     return `#${int.toString(16).padStart(6, "0").toUpperCase()}`;
   }
 
-  static lighten(color: string | number, percent: number): string  {
+  static lighten(color: string | number, percent: number): HexColor  {
     if (typeof color === "number") {
-      color = helpers.intToHex(color);
+      color = Helpers.intToHex(color);
     }
 
     const colorObj = tinycolor(color);
 
-    return colorObj.lighten(percent).toString();
+    return colorObj.lighten(percent).toString() as HexColor;
   }
-  static colorSpin(color: string | number, percent: number): string  {
+  static colorSpin(color: string | number, percent: number): HexColor  {
     if (typeof color === "number") {
-      color = helpers.intToHex(color);
+      color = Helpers.intToHex(color);
     }
 
     const colorObj = tinycolor(color);
-    return colorObj.spin(percent).toString();
+    return colorObj.spin(percent).toString() as HexColor;
   }
 
-  static darken(color: string | number, percent: number): string  {
+  static darken(color: string | number, percent: number): HexColor  {
     if (typeof color === "number") {
-      color = helpers.intToHex(color);
+      color = Helpers.intToHex(color);
     }
 
     const colorObj = tinycolor(color);
 
-    return colorObj.darken(percent).toString();
+    return colorObj.darken(percent).toString() as HexColor;
   }
 }

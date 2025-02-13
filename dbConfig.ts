@@ -4,7 +4,7 @@ import path from "path";
 import readline from "readline";
 import "reflect-metadata";
 import { DataSource } from "typeorm";
-import { AppDataSource } from "./models/Db";
+import Db, { AppDataSource } from "./models/Db";
 
 
 const args = process.argv.slice(2);
@@ -44,10 +44,12 @@ const createSeed = async (name?: string) => {
   const seedTemplate = `import { AppDataSource } from "../Db";
 
 export const run = async () => {
-  await AppDataSource.initialize();
   console.log("Running seed: ${name}");
-  // Implement seeding logic here
-  await AppDataSource.destroy();
+  const startTime = new Date().getTime();
+  // await YourMethod()
+  console.log("Done ${name} Took "+(
+    (new Date().getTime() - startTime
+  )/1000+"s"  ));
 };`;
 
   fs.writeFileSync(seedFilePath, seedTemplate);
@@ -57,7 +59,7 @@ export const run = async () => {
 
 const runSeed = async (dataSource: DataSource, name?: string) => {
   try {
-    await dataSource.initialize();
+    // await dataSource.initialize();
     const seedDir = path.join("./", "models", "seeds");
     const seedFiles = fs.readdirSync(seedDir);
     // .find((file) => file.includes(`-${name}.ts`));
@@ -65,7 +67,7 @@ const runSeed = async (dataSource: DataSource, name?: string) => {
     // console.log(path.join(seedDir, file));
     // return;
     const modules = import.meta.glob("./models/seeds/*.ts", { eager: true });
-    console.log(modules);
+    // console.log(modules);
 
     let fileNotFound = true;
     for (const modPath in modules) {
