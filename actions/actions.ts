@@ -34,7 +34,7 @@ export async function positionNode(
   allEdges: ClientEdge[]
 ) {
   const increaseDegree = (2 * Math.PI) / count;
-  const r = (5 / Math.pow(currentNode.level+1,1.5)) * ( parentNode.weight/100 +(count/100)*Math.random())
+  const r = (5 / Math.pow(currentNode.level+5,1)) * ( (100)*(1/currentNode.level+Math.random()))
   // const r =
   //   (4 / currentNode.level) *
   //   (currentNode.level === 2
@@ -69,7 +69,7 @@ export async function positionNode(
     },
   });
 
-  if (currentNode.level < 3) {
+  if (currentNode.level < 4) {
     const children = await GraphNode.find({ where: { parent: { id: currentNode.id } } });
     
     for (let i = 0; i < children.length; i++) {

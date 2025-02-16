@@ -27,7 +27,7 @@ export default function Grapher({ data }: SigmaGraphProps): React.ReactNode {
   const graph = new Graph();
   const [layout, setLayout] = useState(null);
   const [iterations, setIterations] = useState(0);
-  const running = useRef(true);
+  const running = useRef(false);
 
   // const positions = forceAtlas2(graph, {iterations: 50});
 
@@ -38,13 +38,13 @@ export default function Grapher({ data }: SigmaGraphProps): React.ReactNode {
 
     graph.import(data);
 
-    // const l = new FA2Layout(graph, {
-    //   settings: {
-    //     gravity: .5,
-    //     adjustSizes: true,
-    //   },
-    // });
-    // setLayout(l);
+    const l = new FA2Layout(graph, {
+      settings: {
+        gravity: .5,
+        adjustSizes: true,
+      },
+    });
+    setLayout(l);
 
     // // To start the layout
     // l.start();

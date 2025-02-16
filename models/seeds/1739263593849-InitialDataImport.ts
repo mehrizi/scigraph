@@ -104,7 +104,7 @@ async function parseCsvIntoDb(filePath: string) {
         where: {
           name: level3,
           level: 3,
-          parent: { id: parentNode.id },
+          parent: { id: childNode.id },
         },
       });
 
@@ -120,7 +120,7 @@ async function parseCsvIntoDb(filePath: string) {
       }
 
       let finalNode = await GraphNode.findOne({
-        where: { name: name, level: 4 },
+        where: { name: name, level: 4 ,parent:{id:childNode2.id}},
       });
       if (!finalNode) {
         finalNode = new GraphNode();
