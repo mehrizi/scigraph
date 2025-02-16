@@ -42,13 +42,13 @@ Consider the following scenarios:
 
 1. A grieving mother, who recently lost her 15-year-old son, seeks help from a psychoanalyst. The analyst follows a traditional method—listening, nodding, and offering containment—but lacks knowledge of alternative treatments like cognitive-behavioral therapy or medication. The next day, she commits suicide.
 
-2. A skilled front-end developer is highly proficient in ES6, React, and Tailwind, enabling them to build complex interfaces efficiently. However, their lack of algorithmic thinking and object-oriented programming knowledge becomes a bottleneck when transitioning to back-end development or optimizing performance. For example, when asked to refactor an inefficient recursive function, they struggle, leading to suboptimal code. This knowledge gap can limit career growth and prevent them from contributing to more scalable and maintainable systems.
+2. Such a developer usually find his way around googling which a backboned software engineer also does but, when he googles he naively copy past but the engineer understands the backbone. Now this talented programmer is offered a wast project and he accepts it with a low price but the outcome is a messy and low performant app.
 
 3. A devoted Christian follows the teachings of their church, practicing faith without exploring other religions or philosophical perspectives. This unwavering belief provides personal peace, but it can lead to challenges in intercultural interactions. For instance, when faced with a moral dilemma requiring engagement with other belief systems, they may struggle to reconcile differences, potentially leading to misunderstandings or conflicts. In a rapidly globalizing world, an unexamined faith might hinder personal growth and limit meaningful dialogue with others of different backgrounds.
 
 As illustrated in **Why Nations Fail** by Nobel laureates Daron Acemoglu and James A. Robinson, nations collapse when their systems fail. However, systems do not improve unless the majority of people change, and the majority does not change unless they **study**.
 
-Let me emphasize "study"—casual reading does not guarantee transformation, and if it does, the change is not necessarily positive.
+Let me emphasize "study". Vandal reading does not guarantee transformation, and if it does, the change is not necessarily positive.
 
 (A discussion on "positive" change might be reserved for another project. 😃)
 
