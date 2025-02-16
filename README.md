@@ -1,53 +1,57 @@
 # Weighting
-Every Node/Edge has a size attribute that is caclulated as a sum of the following attributes:
+Every Node/Edge has a size attribute that is calculated as a sum of the following attributes:
 - Parent Relationship size
 - Sum size of books
-- 
+
 ## Book Weight
-Each book has the following attributes and size of a book is the multiplication of the following attributes:
+Each book has the following attributes, and the size of a book is determined by the multiplication of these attributes:
 
 - Copy count
 - Book Grade (Written for public: 1, Specialized: 2)
-- Writer Grade (Noble Winner:2, Other writers: 1)
+- Writer Grade (Nobel Winner: 2, Other writers: 1)
 
-Books on edge of two nodes are listed for both nodes but will contribute 50% increase in size for each node.
+Books on the edge of two nodes are listed for both nodes but will contribute a 50% increase in size for each node.
 
 # Positioning
-The idea is to minimize the total lenght of all edges in the graph without having overlaps of nodes!
+The goal is to minimize the total length of all edges in the graph while ensuring nodes do not overlap. Mathematically, this can be approached as an optimization problem, where we seek to minimize the sum of Euclidean distances between connected nodes. Formally, given a set of nodes (V) and edges (E), we define the total edge length as:
 
+L = Σ d(i,j) for all (i,j) ∈ E
 
-# Phylosophy
-I see people specialized in different fields but they usually lack a big picture or at least they don\'t know how, where and "when" their specialty is located in the field or in general knowledge.
+where d(i,j) represents the Euclidean distance between nodes i and j. To prevent overlap, constraints can be introduced such that the minimum distance between any two nodes i, j is greater than a threshold δ. This can be solved using force-directed graph layout algorithms or constraint-based optimization techniques like simulated annealing or genetic algorithms.
+
+# Philosophy
+I observe that people specialize in different fields, but they often lack a broader perspective or an understanding of where their expertise fits within the larger body of knowledge.
 
 Some examples:
 
-1. I see freudian psychoanalysts who have strong sence about their method, but they totally lack a picture of all therapeutic methods, and how psychoanalysis is compared to them.
+1. **Freudian Psychoanalysts**: They have a strong grasp of their method but lack awareness of other therapeutic approaches and how psychoanalysis compares.
+2. **Focused Programmers**: A developer proficient in ES6, React, and Tailwind might be an expert in implementation but have little knowledge of algorithms or object-oriented programming.
+3. **Religious Followers**: A devoted Christian who follows church teachings might never have studied other religions, yet they are at peace with their beliefs.
 
-2. I encounter couragous programmers focused on some stack, lets say ES6&React&Tailwind. But He lacks algorithmic knwoledge and know little of OOP. He is a guru in React implementation and can pracatically build evrything with his expertise.
+These examples illustrate individuals deeply knowledgeable in their niche yet unaware of the broader context of their field. This can be risky or, at the very least, costly.
 
-3. A Born christian, who goes to the church on sunday every week. He believes in God and follows common moralities of the church. He never studied other religions but he is peaceful with himself.
+## Why Does It Matter?
+While my argument is largely subjective, it is rooted in repeated experience, cognitive reasoning, and study. I believe an objective study of this phenomenon would support my findings, as **patterns of repetition matter**.
 
-These examples demonstrate people very expert and believers in their niche but very unawair where their knowledge/underestanding is placed in the field. This can be very dangerous or at least very costly!
+My assertion is:
 
-## Why does it matter?
-While my debate here is mostly subjective and basically arose from repetitive experience and ofcourse some cognitive thinking and studying. I think objective study of the matter would confirm my findings as _repetition_ of my experiences matters!
+> Every human (as a neural-network-based entity) practicing a subject should acquire knowledge about the subject’s placement within the broader system; otherwise, at some point, it will incur a cost.
 
-My statement would say:
+### How Can This Be Dangerous?
+Consider the following scenarios:
 
-> Every human (neural network based entity), practicing a subject, should gather information and knowledge about the subject placement in general otherwise it would cost the system at one point!
+1. A grieving mother, who recently lost her 15-year-old son, seeks help from a psychoanalyst. The analyst follows a traditional method—listening, nodding, and offering containment—but lacks knowledge of alternative treatments like cognitive-behavioral therapy or medication. The next day, she commits suicide.
 
-In case of any of the examples let me explain how I saw the sitatuion went/can be dangerous:
+2. A skilled front-end developer is highly proficient in ES6, React, and Tailwind, enabling them to build complex interfaces efficiently. However, their lack of algorithmic thinking and object-oriented programming knowledge becomes a bottleneck when transitioning to back-end development or optimizing performance. For example, when asked to refactor an inefficient recursive function, they struggle, leading to suboptimal code. This knowledge gap can limit career growth and prevent them from contributing to more scalable and maintainable systems.
 
-1. The patient is suffering from loosing his son at age of 15. She asks for help by visiting the psychoanalyst. She is suffering from depression and very low mood. Psychoanalysts asks her small questions and some nodding and containing... 
-She commits suicide the other day
+3. A devoted Christian follows the teachings of their church, practicing faith without exploring other religions or philosophical perspectives. This unwavering belief provides personal peace, but it can lead to challenges in intercultural interactions. For instance, when faced with a moral dilemma requiring engagement with other belief systems, they may struggle to reconcile differences, potentially leading to misunderstandings or conflicts. In a rapidly globalizing world, an unexamined faith might hinder personal growth and limit meaningful dialogue with others of different backgrounds.
 
-2. 
+As illustrated in **Why Nations Fail** by Nobel laureates Daron Acemoglu and James A. Robinson, nations collapse when their systems fail. However, systems do not improve unless the majority of people change, and the majority does not change unless they **study**.
 
-3.
+Let me emphasize "study"—casual reading does not guarantee transformation, and if it does, the change is not necessarily positive.
 
-As Some Objective studies like "Why Nations Fail" by nobel winners Daron Acemoglu and James A. Robinson suggests nation fails because their system fails but systems does not change and get better unless the majority change. And majority does not change unless they _study_! And let me emphasize on "study" because wandal reading does not change you or if it does it is not granted for positive change!
+(A discussion on "positive" change might be reserved for another project. 😃)
 
-On "positive" changing maybe in another project :D
+## Etymological Why
+I would like to begin by exploring how knowledge is formed and perceived by our nervous system and brain.
 
-## Ethymological Why
-I would like to start with how knoledge is formed and percieved by our nervous system and brain
