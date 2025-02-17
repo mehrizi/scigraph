@@ -59,8 +59,9 @@ export default function Grapher({ data }: SigmaGraphProps): React.ReactNode {
 
     const l2 = new FA2Layout(graph, {
       settings: {
-        gravity: 0.5,
+        gravity: 10,
         adjustSizes: true,
+        scalingRatio: 0.5,
       },
     });
     setFa2Layout(l2);
@@ -82,6 +83,8 @@ export default function Grapher({ data }: SigmaGraphProps): React.ReactNode {
 
     const handleHover = (node?: string) => {
       if (node) {
+        // console.log(graph.neighbors(node));
+
         setHoveredNode(node);
         setHoveredNeighbors(new Set(graph.neighbors(node)));
       } else {
@@ -98,27 +101,78 @@ export default function Grapher({ data }: SigmaGraphProps): React.ReactNode {
       // rendererInstance?.refresh({ skipIndexation: true });
     });
 
-    rendererInstance.on("enterNode", ({ node }) => handleHover(node));
-    rendererInstance.on("leaveNode", () => handleHover(undefined));
+    rendererInstance.on("enterNode", (props) => {
+      // Get all edges connected to this node
+      const connectedEdges = graph.edges().filter((edge) => {
+        const [source, target] = graph.extremities(edge);
+        return source === props.node || target === props.node;
+      });
 
-    rendererInstance.setSetting("nodeReducer", (node, data) => {
-      const res: Partial<any> = { ...data };
-      if (
-        hoveredNeighbors &&
-        !hoveredNeighbors.has(node) &&
-        hoveredNode !== node
-      ) {
-        res.label = "";
-        res.color = "#f6f6f6";
-      }
-      if (selectedNode === node) {
-        res.highlighted = true;
-      } else if (suggestions && !suggestions.has(node)) {
-        res.label = "";
-        res.color = "#f6f6f6";
-      }
-      return res;
+      // Highlight these edges by setting an attribute
+      connectedEdges.forEach((edge) => {
+        graph.setEdgeAttribute(
+          edge,
+          "old_color",
+          graph.getEdgeAttribute(edge, "color")
+        );
+        graph.setEdgeAttribute(edge, "color", "#ff0000");
+      });
+
+      graph.neighbors(props.node).forEach((n) => {
+        graph.setNodeAttribute(n, "highlighted", true);
+      });
+      // handleHover(node)
+      // node.
+      // graph.edge();
+      // graph.neighbors(props.node).forEach((n) => {
+      //   graph.setNodeAttribute(n, "highlighted", true);
+      // });
+      console.log(props);
     });
+    rendererInstance.on("leaveNode", (props) => {
+      const connectedEdges = graph.edges().filter((edge) => {
+        const [source, target] = graph.extremities(edge);
+        return source === props.node || target === props.node;
+      });
+
+      // Highlight these edges by setting an attribute
+      connectedEdges.forEach((edge) => {
+        // graph.setEdgeAttribute(edge, "highlighted", false);
+        // Optionally set other attributes like color
+        graph.setEdgeAttribute(
+          edge,
+          "color",
+          graph.getEdgeAttribute(edge, "old_color")
+        );
+      });
+
+      graph.neighbors(props.node).forEach((n) => {
+        graph.setNodeAttribute(n, "highlighted", false);
+      });
+    });
+
+    // rendererInstance.setSetting("nodeReducer", (node, data) => {
+    //   // if (hoveredNode) console.log(hoveredNode);
+    //   // console.log(node);
+
+    //   const res: Partial<any> = { ...data };
+    //   if (
+    //     hoveredNeighbors &&
+    //     !hoveredNeighbors.has(node) &&
+    //     hoveredNode !== node
+    //   ) {
+    //     res.label = "";
+    //     res.color = "#f6f6f6";
+    //   }
+    //   if (selectedNode === node) {
+    //     console.log(hoveredNode);
+    //     res.highlighted = true;
+    //   } else if (suggestions && !suggestions.has(node)) {
+    //     res.label = "";
+    //     res.color = "#f6f6f6";
+    //   }
+    //   return res;
+    // });
 
     rendererInstance.setSetting("edgeReducer", (edge, data) => {
       const res: Partial<any> = { ...data };
