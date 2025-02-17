@@ -5,11 +5,17 @@ import Sigma from "sigma";
 import PhysicsPositioning from "@/classes/PhysicsPositioning";
 import forceAtlas2 from "graphology-layout-forceatlas2";
 import FA2Layout from "graphology-layout-forceatlas2/worker";
+import NoverlapLayout from "graphology-layout-noverlap/worker";
+import circular from "graphology-layout/circular";
+import random from "graphology-layout/random";
+import circlepack from "graphology-layout/circlepack";
+import ForceSupervisor from "graphology-layout-force/worker";
 
 type SigmaGraphProps = {
   data: any; // Replace 'any' with the appropriate type of your graph data
 };
 
+export type AlgorithTypes = "noverlap" | "fa2" | "force";
 export default function Grapher({ data }: SigmaGraphProps): React.ReactNode {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const searchInputRef = useRef<HTMLInputElement | null>(null);
@@ -25,37 +31,54 @@ export default function Grapher({ data }: SigmaGraphProps): React.ReactNode {
     Set<string> | undefined
   >(undefined);
   const graph = new Graph();
+  graph.import(data);
+
+  const [algorithm, setAlgorithm] = useState<AlgorithTypes>("noverlap");
+  const [noverlapLayout, setNoverlapLayout] = useState<NoverlapLayout | null>(
+    null
+  );
+  const [fa2Layout, setFa2Layout] = useState<FA2Layout | null>(null);
+  const [forceLayout, setForceLayout] = useState<FA2Layout | null>(null);
   const [layout, setLayout] = useState(null);
-  const [iterations, setIterations] = useState(0);
-  const running = useRef(false);
+  const [running, setRunning] = useState(false);
+  const [renderer, setRenderer] = useState<Sigma | null>(null);
 
   // const positions = forceAtlas2(graph, {iterations: 50});
 
-  var renderer: Sigma | null = null;
+  // var renderer: Sigma | null = null;
   // var layout: FA2Layout | null = null;
   useEffect(() => {
     if (!containerRef.current) return;
 
-    graph.import(data);
+    // random.assign(graph);
+    // circlepack.assign(graph);
+    // circular.assign(graph);
 
-    const l = new FA2Layout(graph, {
+    const l1 = new NoverlapLayout(graph);
+    setNoverlapLayout(l1);
+
+    const l2 = new FA2Layout(graph, {
       settings: {
-        gravity: .5,
+        gravity: 0.5,
         adjustSizes: true,
       },
     });
-    setLayout(l);
+    setFa2Layout(l2);
+
+    const l3 = new ForceSupervisor(graph);
+    setForceLayout(l3);
 
     // // To start the layout
     // l.start();
 
-
     // graph.
-    renderer = new Sigma(graph, containerRef.current, {
+    const rendererInstance = new Sigma(graph, containerRef.current, {
       maxCameraRatio: 1,
     });
 
-    // renderer.({ worker: true, barnesHutOptimize: true });
+    setRenderer(rendererInstance);
+
+    // rendererInstance.({ worker: true, barnesHutOptimize: true });
 
     const handleHover = (node?: string) => {
       if (node) {
@@ -65,20 +88,20 @@ export default function Grapher({ data }: SigmaGraphProps): React.ReactNode {
         setHoveredNode(undefined);
         setHoveredNeighbors(undefined);
       }
-      renderer?.refresh({ skipIndexation: true });
+      rendererInstance?.refresh({ skipIndexation: true });
     };
 
     // console.log(1111, );
-    renderer.getCamera().addListener("updated", function (o) {
+    rendererInstance.getCamera().addListener("updated", function (o) {
       if (o.ratio < 1) return false;
       console.log(o);
-      // renderer?.refresh({ skipIndexation: true });
+      // rendererInstance?.refresh({ skipIndexation: true });
     });
 
-    renderer.on("enterNode", ({ node }) => handleHover(node));
-    renderer.on("leaveNode", () => handleHover(undefined));
+    rendererInstance.on("enterNode", ({ node }) => handleHover(node));
+    rendererInstance.on("leaveNode", () => handleHover(undefined));
 
-    renderer.setSetting("nodeReducer", (node, data) => {
+    rendererInstance.setSetting("nodeReducer", (node, data) => {
       const res: Partial<any> = { ...data };
       if (
         hoveredNeighbors &&
@@ -97,7 +120,7 @@ export default function Grapher({ data }: SigmaGraphProps): React.ReactNode {
       return res;
     });
 
-    renderer.setSetting("edgeReducer", (edge, data) => {
+    rendererInstance.setSetting("edgeReducer", (edge, data) => {
       const res: Partial<any> = { ...data };
       if (
         hoveredNode &&
@@ -118,7 +141,7 @@ export default function Grapher({ data }: SigmaGraphProps): React.ReactNode {
     });
 
     return () => {
-      renderer && renderer.kill();
+      rendererInstance && rendererInstance.kill();
     };
   }, [data]);
 
@@ -158,39 +181,76 @@ export default function Grapher({ data }: SigmaGraphProps): React.ReactNode {
     renderer.refresh({ skipIndexation: true });
   };
 
+  const toggleStart = () => {
+    setRunning(!running);
+    if (algorithm == "fa2" && fa2Layout) {
+      if (running) fa2Layout.stop();
+      else fa2Layout.start();
+    }
+    if (algorithm == "noverlap" && noverlapLayout) {
+      if (running) noverlapLayout.stop();
+      else noverlapLayout.start();
+    }
+    if (algorithm == "force" && forceLayout) {
+      if (running) forceLayout.stop();
+      else forceLayout.start();
+    }
+  };
   return (
     <div>
-      <button
-        onClick={() => {
-          const obj = new PhysicsPositioning(graph);
-          obj.runSimulation();
-          renderer?.refresh();
-        }}
-      >
-        Change
-      </button>
-      <button
-        onClick={() => {
-          layout.stop();
-        }}
-      >
-        Stop
-      </button>
-      <button
-        onClick={() => {
-          layout.start();
-        }}
-      >
-        start
-      </button>
-      <input
-        ref={searchInputRef}
-        type="text"
-        placeholder="Search..."
-        onChange={(e) => handleSearch(e.target.value)}
-        value={searchQuery}
+      <div className="fixed top-1-left-1 z-50">
+        {renderer && (
+          <button
+            className="py-2 px-3 border border-gray-400 m-2"
+            onClick={() => {
+              console.log(graph);
+
+              const obj = new PhysicsPositioning(graph);
+              obj.runSimulation();
+              renderer?.refresh();
+            }}
+          >
+            Change
+          </button>
+        )}
+        <select
+          value={algorithm}
+          onChange={(e) => setAlgorithm(e.target.value)}
+        >
+          <option value={"fa2"}>FA2</option>
+          <option value={"noverlap"}>Noverlap</option>
+          <option value={"force"}>force</option>
+        </select>
+
+        {running && (
+          <button
+            className="py-2 px-3 border border-gray-400 m-2"
+            onClick={toggleStart}
+          >
+            Stop
+          </button>
+        )}
+        {!running && (
+          <button
+            className="py-2 px-3 border border-gray-400 m-2"
+            onClick={toggleStart}
+          >
+            start
+          </button>
+        )}
+        <input
+          ref={searchInputRef}
+          type="text"
+          placeholder="Search..."
+          onChange={(e) => handleSearch(e.target.value)}
+          value={searchQuery}
+        />
+      </div>
+      <div
+        ref={containerRef}
+        className="fixed z-10"
+        style={{ width: "100vw", height: "100vh" }}
       />
-      <div ref={containerRef} style={{ width: "100%", height: "100vh" }} />
     </div>
   );
 }

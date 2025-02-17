@@ -1,5 +1,5 @@
-import Graph from 'graphology';
-import { Helpers } from './Helpers';
+import Graph from "graphology";
+import { Helpers } from "./Helpers";
 
 export default class PhysicsPositioning {
   private graph: Graph;
@@ -7,7 +7,7 @@ export default class PhysicsPositioning {
   private REPULSION_CONSTANT = 500;
   private DAMPING = 0.9;
   private IDEAL_EDGE_LENGTH = 25;
-  private ITERATIONS = 2;
+  private ITERATIONS = 20;
 
   constructor(graph: Graph) {
     this.graph = graph;
@@ -78,8 +78,8 @@ export default class PhysicsPositioning {
       let vx = fx * this.DAMPING;
       let vy = fy * this.DAMPING;
 
-      this.graph.setNodeAttribute(key, 'x', node.x + vx);
-      this.graph.setNodeAttribute(key, 'y', node.y + vy);
+      this.graph.setNodeAttribute(key, "x", node.x + vx);
+      this.graph.setNodeAttribute(key, "y", node.y + vy);
     });
   }
 
@@ -87,8 +87,6 @@ export default class PhysicsPositioning {
     for (let i = 0; i < this.ITERATIONS; i++) {
       const forces = this.applyForces();
       this.updatePositions(forces);
-      
     }
   }
 }
-
