@@ -1,10 +1,10 @@
 import fs from "fs";
-import os from "os";
 import path from "path";
 import readline from "readline";
 import "reflect-metadata";
 import { DataSource } from "typeorm";
-import Db, { AppDataSource } from "./models/Db";
+import { AppDataSource } from "./models/Db";
+import { exit } from "process";
 
 
 const args = process.argv.slice(2);
@@ -13,7 +13,8 @@ const options = args.reduce((acc, arg) => {
   acc[key.replace("--", "")] = value || true;
   return acc;
 }, {} as Record<string, string | boolean>);
-
+console.log(options)
+exit
 const promptForName = async (): Promise<string> => {
   const rl = readline.createInterface({
     input: process.stdin,

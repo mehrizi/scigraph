@@ -39,9 +39,8 @@ async function parseCsvIntoDb(filePath: string) {
   if (count != 0) {
     const answer = await promptForDelete(count);
     if (answer.toLowerCase() == 'y' || answer.toLowerCase() == 'yes') {
-      const db = await Db.getInstance();
-      await db.clean(); // Get repository
-      await db.clean('edges'); // Get repository
+      await db.clean();
+      await db.clean('edges');
 
     }
     else {

@@ -33,6 +33,6 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "data-source.ts"
-  ],
+, "models/seeds/1739347745389-Positioning.temp-ts"  ],
   "exclude": ["node_modules"]
 }
