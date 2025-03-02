@@ -6,15 +6,14 @@ import { DataSource } from "typeorm";
 import { AppDataSource } from "./models/Db";
 import { exit } from "process";
 
-
 const args = process.argv.slice(2);
 const options = args.reduce((acc, arg) => {
   const [key, value] = arg.split("=");
   acc[key.replace("--", "")] = value || true;
   return acc;
 }, {} as Record<string, string | boolean>);
-console.log(options)
-exit
+console.log(options);
+exit;
 const promptForName = async (): Promise<string> => {
   const rl = readline.createInterface({
     input: process.stdin,
@@ -82,7 +81,7 @@ const runSeed = async (dataSource: DataSource, name?: string) => {
       throw new Error("Seed file not found");
     }
 
-    
+    exit();
   } catch (error) {
     console.error("Error running seed:", error);
   } finally {
@@ -91,7 +90,6 @@ const runSeed = async (dataSource: DataSource, name?: string) => {
 };
 
 (async () => {
-
   if (options["create:seed"]) {
     await createSeed(options["name"]);
   }

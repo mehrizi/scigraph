@@ -14,7 +14,6 @@ if [ "$1" = "node-shell" ]; then
   exit 0
 fi
 
-
 if [ "$1" = "shell" ]; then
   # Open a shell into the container
   docker compose exec app sh
@@ -26,10 +25,12 @@ if [ "$1" != "chown" ]; then
   docker compose exec app "$@"
 fi
 
-# Get the current host user UID and GID
-HOST_UID=$(id -u)
-HOST_GID=$(id -g)
+if [ "$1" = "chown" ]; then
+  # Get the current host user UID and GID
+  HOST_UID=$(id -u)
+  HOST_GID=$(id -g)
 
-Fix ownership of newly created files
-echo "Fixing file ownership..."
-sudo chown -R $HOST_UID:$HOST_GID .
+  # Fix ownership of newly created files
+  echo "Fixing file ownership..."
+  sudo chown -R $HOST_UID:$HOST_GID .
+fi
