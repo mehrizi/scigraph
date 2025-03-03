@@ -7,13 +7,17 @@ export const run = async () => {
   const startTime = new Date().getTime();
   const openLibrary = new OpenLibrary();
   const db = await Db.getInstance();
-  // await db.clean("books");
-  // await db.clean("books_subjects_subject");
-  // await db.clean("subject_relation");
-  // await db.clean("subject_relation_subject1_subject");
-  // await db.clean("subject_relation_subject2_subject");
-  // await db.clean("subject");
-  // return;
+
+  let cleanDB = await Helpers.prompt("Clean DB? (y/n)");
+  if (cleanDB === "y" ){
+  await db.clean("books");
+  await db.clean("books_subjects_subject");
+  await db.clean("subject_relation");
+  await db.clean("subject_relation_subject1_subject");
+  await db.clean("subject_relation_subject2_subject");
+  await db.clean("subject");
+
+  }
 
   let storedStart = await Helpers.readFileValue("openlib-last-start.txt");
   let start: number = 0;

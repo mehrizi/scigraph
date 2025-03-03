@@ -15,7 +15,7 @@ export class OpenLibrary {
     try {
       const response = await axios.get(this.apiUrl, {
         params: {
-          q: "computer", // Query all books
+          q: "math", // Query all books
           offset: start,
           limit: limit,
           fields: `title,author_name,subject,author_key,first_publish_year,language,number_of_pages_median`,

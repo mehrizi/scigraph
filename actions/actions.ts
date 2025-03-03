@@ -5,6 +5,7 @@ import { ClientEdge, ClientNode, HexColor } from "@/classes/types";
 import Db from "@/models/Db";
 import { GraphNode } from "@/models/GraphNode";
 import { Subject, SubjectRelation } from "@/models/Subject";
+import { In, MoreThan } from "typeorm";
 
 export async function getPositionedNodes() {
   await Db.getInstance();
@@ -27,35 +28,49 @@ export async function getPositionedNodes() {
 export async function getBookPositionedNodes() {
   await Db.getInstance();
   let allNodes: ClientNode[] = [];
+  let allNodeIds: number[] = [];
   let allEdges: ClientEdge[] = [];
 
-  const items = await Subject.find();
+  const items = await Subject.find({ where: { weight: MoreThan(4) } });
 
   for (let i = 0; i < items.length; i++) {
     const currentNode = items[i];
+    const { color, weight } = Helpers.nodeColorWeight(currentNode.weight)
     const node = {
       key: currentNode.id.toString(),
       attributes: {
         x: Math.random() * 200,
         y: Math.random() * 200,
-        size: 10,
+        size: weight,
         label: currentNode.name,
-        color: "#aabbcc",
+        color: color,
       },
     };
+    allNodeIds.push(currentNode.id);
     allNodes.push(node);
   }
-  const edgeItems = await SubjectRelation.find();
+  const edgeItems = await SubjectRelation.find({
+    where:
+    {
+      weight: MoreThan(5),
+      subject1: In(allNodeIds),
+      subject2: In(allNodeIds)
+    },
+
+
+  });
 
   for (let i = 0; i < edgeItems.length; i++) {
-    const currentNode = edgeItems[i];
+    const currentEdge = edgeItems[i];
+    const { color, weight } = Helpers.edgeColorWeight(currentEdge.weight)
+
     allEdges.push({
-      key: `${currentNode.subject1}-${currentNode.subject2}`,
-      source: currentNode.subject1.toString(),
-      target: currentNode.subject2.toString(),
+      key: `${currentEdge.subject1}-${currentEdge.subject2}`,
+      source: currentEdge.subject1.toString(),
+      target: currentEdge.subject2.toString(),
       attributes: {
-        size: currentNode.weight,
-        color: "#ccc", // Helpers.darken(parentClientNode.attributes.color, 25 * Math.cos(index * increaseDegree)),
+        color,
+        size: weight
       },
     });
   }
@@ -85,8 +100,8 @@ export async function positionNode(
     (currentNode.level === 2
       ? 5 + 3 * Math.random()
       : currentNode.level === 3
-      ? 3 + 1 * Math.random()
-      : 1 + 2 * Math.random());
+        ? 3 + 1 * Math.random()
+        : 1 + 2 * Math.random());
 
   const x =
     parentClientNode.attributes.x + r * Math.sin(index * increaseDegree);
@@ -184,3 +199,5 @@ export async function positionLevelOneNode(
     );
   }
 }
+
+

@@ -2,6 +2,12 @@ import tinycolor from "tinycolor2";
 import { HexColor } from "./types";
 import * as fs from "fs/promises";
 import * as path from "path";
+import readline from "readline";
+import { Micro_5 } from "next/font/google";
+export interface NodeColorWeight {
+  color: HexColor;
+  weight: number;
+}
 
 export class Helpers {
   static async sleep(millis: number) {
@@ -92,4 +98,74 @@ export class Helpers {
       throw new Error(`Failed to write to file: ${error.message}`);
     }
   }
+
+  static async prompt(message: string): Promise<string> {
+    const rl = readline.createInterface({
+      input: process.stdin,
+      output: process.stdout,
+    });
+
+    return new Promise((resolve) => {
+      rl.question(message, (inputName) => {
+        rl.close();
+        resolve(inputName.trim());
+      });
+    });
+  };
+
+
+  static edgeColorWeight(weight: number, maxWeight: number = 100): NodeColorWeight {
+    // Normalize the weight to a scale of 0 to 1
+    const normalizedWeight = Math.min(weight, maxWeight) / maxWeight;
+
+    // Calculate the final weight (weight / 10)
+    const finalWeight = Math.min(5, weight / 10);
+
+    // Define color gradients
+    const lowColor = [204, 204, 204]; // Light gray (#CCCCCC)
+    const highColor = [174, 52, 235];    // Red (#FF0000)
+
+    // Interpolate between lowColor and highColor based on normalizedWeight
+    const color = [
+      Math.round(lowColor[0] + (highColor[0] - lowColor[0]) * normalizedWeight),
+      Math.round(lowColor[1] + (highColor[1] - lowColor[1]) * normalizedWeight),
+      Math.round(lowColor[2] + (highColor[2] - lowColor[2]) * normalizedWeight)
+    ];
+
+    // Convert RGB to hex color
+    const colorHex = `#${color[0].toString(16).padStart(2, '0')}${color[1].toString(16).padStart(2, '0')}${color[2].toString(16).padStart(2, '0')}` as HexColor;
+
+    return {
+      color: colorHex,
+      weight: finalWeight
+    };
+  }
+
+  static nodeColorWeight(weight: number, maxWeight: number = 3000): NodeColorWeight {
+    // Normalize the weight to a scale of 0 to 1
+    const normalizedWeight = Math.min(weight, maxWeight) / maxWeight;
+
+    // Calculate the final weight (weight / 10)
+    const finalWeight =Math.max(1, Math.min(15, weight / 100));
+
+    // Define color gradients
+    const lowColor = [76, 235, 52]; // Light gray (#CCCCCC)
+    const highColor = [76, 235, 52];    // Red (#FF0000)
+
+    // Interpolate between lowColor and highColor based on normalizedWeight
+    const color = [
+      Math.round(lowColor[0] + (highColor[0] - lowColor[0]) * normalizedWeight),
+      Math.round(lowColor[1] + (highColor[1] - lowColor[1]) * normalizedWeight),
+      Math.round(lowColor[2] + (highColor[2] - lowColor[2]) * normalizedWeight)
+    ];
+
+    // Convert RGB to hex color
+    const colorHex = `#${color[0].toString(16).padStart(2, '0')}${color[1].toString(16).padStart(2, '0')}${color[2].toString(16).padStart(2, '0')}` as HexColor;
+
+    return {
+      color: colorHex,
+      weight: finalWeight
+    };
+  }
+
 }
